@@ -19,21 +19,14 @@ env:
 jobs:
   terraform:
     name: Terraform CI/CD Pipeline
-    runs-on: ubuntu-latest
+    runs-on: Infra-Runner
 
     steps:
       # ------------------- Checkout Repo -------------------
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # ------------------- Azure Login (Client Secret Auth) -------------------
-      # - name: Azure Login
-      #   uses: azure/login@v2
-      #   with:
-      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      #     # secret: ${{ secrets.AZURE_CLIENT_SECRET }}
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -47,7 +40,8 @@ jobs:
 
       # ------------------- Terraform Init -------------------
       - name: Terraform Init
-        run: terraform init \
+        run: |
+          terraform init \
           -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
           -backend-config="container_name=$CONTAINER_NAME" \
           -backend-config="key=$STATE_FILE" \
