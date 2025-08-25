@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main
-      # - none
+      - 'feature/**'
   pull_request:
     branches:
       - main
 
 env:
   # Backend storage info for Terraform remote state
-  STORAGE_ACCOUNT_NAME:      # <-- apna storage account name daalo
+  STORAGE_ACCOUNT_NAME: devopsinsidersstates      # <-- apna storage account name daalo
   CONTAINER_NAME: tfstate                         # <-- container jaha state rakha hai
   STATE_FILE: dev.terraform.tfstate               # <-- tfstate file ka naam
   RESOURCE_GROUP: STATE-RG-NAME                   # <-- storage account ka RG daalo
