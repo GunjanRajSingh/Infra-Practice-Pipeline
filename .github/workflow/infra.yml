@@ -1,0 +1,67 @@
+name: Terraform Infra Deployment
+
+on:
+  push:
+    branches:
+      # - main
+      - none
+  pull_request:
+    branches:
+      - main
+
+env:
+  # Backend storage info for Terraform remote state
+  STORAGE_ACCOUNT_NAME:      # <-- apna storage account name daalo
+  CONTAINER_NAME: tfstate                         # <-- container jaha state rakha hai
+  STATE_FILE: dev.terraform.tfstate               # <-- tfstate file ka naam
+  RESOURCE_GROUP: STATE-RG-NAME                   # <-- storage account ka RG daalo
+
+jobs:
+  terraform:
+    name: Terraform CI/CD Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------- Checkout Repo -------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ------------------- Azure Login (Client Secret Auth) -------------------
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      # ------------------- Setup Terraform -------------------
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      # ------------------- Terraform Init -------------------
+      - name: Terraform Init
+        run: terraform init \
+          -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
+          -backend-config="container_name=$CONTAINER_NAME" \
+          -backend-config="key=$STATE_FILE" \
+          -backend-config="resource_group_name=$RESOURCE_GROUP"
+
+      # ------------------- Terraform Fmt -------------------
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      # ------------------- Terraform Validate -------------------
+      - name: Terraform Validate
+        run: terraform validate
+
+      # ------------------- Terraform Plan -------------------
+      - name: Terraform Plan
+        run: terraform plan -input=false
+
+      # ------------------- Terraform Apply -------------------
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'   # sirf main branch par chalega
+        run: terraform apply -auto-approve
