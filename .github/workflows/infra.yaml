@@ -30,10 +30,10 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: 30f86919-52c7-465c-aa6a-1beeea6d8dfd
-          tenant-id: 0cd94da3-6ea1-4939-8630-bd60916b12c2
-          subscription-id: f0ea4d91-8845-4cde-80fa-52ca5703a10a
-          client_secret: .xp8Q~1Ng7ZBMwDAn7MLX1VrIkmVBJ4oavGIta5K
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       # ------------------- Setup Terraform -------------------
       - name: Setup Terraform
