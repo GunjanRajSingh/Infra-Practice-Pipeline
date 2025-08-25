@@ -19,7 +19,7 @@ env:
 jobs:
   terraform:
     name: Terraform CI/CD Pipeline
-    runs-on: Infra-Runner
+    runs-on: new-runner
 
     steps:
       # ------------------- Checkout Repo -------------------
