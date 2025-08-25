@@ -18,11 +18,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/16"]
 }
 
-<<<<<<< HEAD
 resource "azurerm_subnet" "subnet" {
-=======
-resource "azurerm_subnet" "example" {
->>>>>>> 50955552d3091baac5f54997b58d4a97088641a1
   name                 = "practice-subnet"
   resource_group_name  = azurerm_resource_group.rgblock.name
   virtual_network_name = azurerm_virtual_network.vnet.name
