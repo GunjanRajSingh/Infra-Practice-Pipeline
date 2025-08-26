@@ -11,6 +11,10 @@ on:                                                        #Trigger from ADO
       - main
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+  
 env:
   RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
   STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
