@@ -16,10 +16,10 @@ permissions:
   contents: read
   
 env:
-  RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
-  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
-  CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
-  STATE_FILE: ${{ vars.STATE_FILE }}
+  RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+  STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+  STATE_FILE: ${{ secrets.STATE_FILE }}
 
 jobs:
   Terraform-Plan:                                                #job ka naam diya
@@ -92,5 +92,5 @@ jobs:
        # working-directory: ./terraform
 
      - name: Terraform Apply
-       run: terraform aaply -auto-approve
+       run: terraform apply -auto-approve
        # working-directory: ./terraform
