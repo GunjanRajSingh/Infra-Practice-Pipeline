@@ -44,11 +44,12 @@ jobs:
           terraform_version: latest
           
      - name: Terraform Init
-       run: terraform init \
-            -backend-config="resource_group_name=${{ env.RESOURCE_GROUP }}" \
-            -backend-config="storage_account_name=${{ env.STORAGE_ACCOUNT_NAME }}" \
-            -backend-config="container_name=${{ env.CONTAINER_NAME }}" \
-            -backend-config="key=${{ env.STATE_FILE }}"
+       run: |
+         terraform init \
+         -backend-config="resource_group_name=${{ secrets.AZURE_RG }}" \
+         -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT }}" \
+         -backend-config="container_name=${{ secrets.CONTAINER_NAME }}" \
+         -backend-config="key=${{ secrets.STATE_FILE_KEY }}"
        # working-directory: ./terraform
       
      - name: Terraform Validate
