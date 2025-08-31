@@ -55,7 +55,10 @@ jobs:
      - name: Terraform Validate
        run: terraform validate
        # working-directory: ./terraform
-
+     
+     - name: Terraform Plan
+       run: terraform Plan
+  
   Terraform-Apply:                                                #job ka naam diya
     runs-on: ubuntu-latest                                  #Microsoft Hosted Runner liya hai maine
     needs: Terraform-Plan
