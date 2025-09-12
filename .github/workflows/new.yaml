@@ -1,99 +1,99 @@
-name: Terraform Infra Creation                             #Project ka naam hai
+# name: Terraform Infra Creation                             #Project ka naam hai
 
-on:                                                        #Trigger from ADO
-  # push:
-  #   branches:
-  #     - main
-  #     - feature/**
-  #     - release/**
-  # pull_request:
-  #   branches:
-  #     - main
-  workflow_dispatch:
+# on:                                                        #Trigger from ADO
+#   # push:
+#   #   branches:
+#   #     - main
+#   #     - feature/**
+#   #     - release/**
+#   # pull_request:
+#   #   branches:
+#   #     - main
+#   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
+# permissions:
+#   id-token: write
+#   contents: read
   
-env:
-  RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-  STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
-  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-  STATE_FILE: ${{ secrets.STATE_FILE }}
+# env:
+#   RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+#   STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+#   CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+#   STATE_FILE: ${{ secrets.STATE_FILE }}
 
-jobs:
-  Terraform-Plan:                                                #job ka naam diya
-    runs-on: ubuntu-latest                                  #Microsoft Hosted Runner liya hai maine
+# jobs:
+#   Terraform-Plan:                                                #job ka naam diya
+#     runs-on: ubuntu-latest                                  #Microsoft Hosted Runner liya hai maine
 
-    steps:     
-     - name: Checkout Repository                            #Repo se code hum hummare VM me daal rahe
-       uses: actions/checkout@v5                            #actions is kind of Task here
+#     steps:     
+#      - name: Checkout Repository                            #Repo se code hum hummare VM me daal rahe
+#        uses: actions/checkout@v5                            #actions is kind of Task here
 
-     - name: Azure Login
-       uses: Azure/login@v2
-       with:                                                
-          # client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          # tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          # client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#      - name: Azure Login
+#        uses: Azure/login@v2
+#        with:                                                
+#           # client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           # tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#           # client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+#           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-     - name: Setup Terraform
-       uses: hashicorp/setup-terraform@v2
-       with:                                                
-          terraform_version: latest
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v2
+#        with:                                                
+#           terraform_version: latest
           
-     - name: Terraform Init
-       run: |
-         terraform init \
-         -backend-config="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
-         -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}" \
-         -backend-config="container_name=${{ secrets.CONTAINER_NAME }}" \
-         -backend-config="key=${{ secrets.STATE_FILE }}"
-       # working-directory: ./terraform
+#      - name: Terraform Init
+#        run: |
+#          terraform init \
+#          -backend-config="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
+#          -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}" \
+#          -backend-config="container_name=${{ secrets.CONTAINER_NAME }}" \
+#          -backend-config="key=${{ secrets.STATE_FILE }}"
+#        # working-directory: ./terraform
       
-     - name: Terraform Validate
-       run: terraform validate
-       # working-directory: ./terraform
+#      - name: Terraform Validate
+#        run: terraform validate
+#        # working-directory: ./terraform
      
-     - name: Terraform Plan
-       run: terraform Plan
+#      - name: Terraform Plan
+#        run: terraform Plan
   
-  Terraform-Apply:                                                #job ka naam diya
-    runs-on: ubuntu-latest                                  #Microsoft Hosted Runner liya hai maine
-    needs: Terraform-Plan
+#   Terraform-Apply:                                                #job ka naam diya
+#     runs-on: ubuntu-latest                                  #Microsoft Hosted Runner liya hai maine
+#     needs: Terraform-Plan
     
-    steps:     
-     - name: Checkout Repository                            #Repo se code hum hummare VM me daal rahe
-       uses: actions/checkout@v5                            #actions is kind of Task here
+#     steps:     
+#      - name: Checkout Repository                            #Repo se code hum hummare VM me daal rahe
+#        uses: actions/checkout@v5                            #actions is kind of Task here
 
-     - name: Azure Login
-       uses: Azure/login@v2
-       with:                                                
-          # client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          # tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          # client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#      - name: Azure Login
+#        uses: Azure/login@v2
+#        with:                                                
+#           # client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           # tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#           # client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+#           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-     - name: Setup Terraform
-       uses: hashicorp/setup-terraform@v2
-       with:                                                
-          terraform_version: latest
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v2
+#        with:                                                
+#           terraform_version: latest
           
-     - name: Terraform Init
-       run: |
-         terraform init \
-         -backend-config="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
-         -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}" \
-         -backend-config="container_name=${{ secrets.CONTAINER_NAME }}" \
-         -backend-config="key=${{ secrets.STATE_FILE }}"
-       # working-directory: ./terraform
+#      - name: Terraform Init
+#        run: |
+#          terraform init \
+#          -backend-config="resource_group_name=${{ secrets.RESOURCE_GROUP }}" \
+#          -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}" \
+#          -backend-config="container_name=${{ secrets.CONTAINER_NAME }}" \
+#          -backend-config="key=${{ secrets.STATE_FILE }}"
+#        # working-directory: ./terraform
       
-     - name: Terraform Validate
-       run: terraform validate
-       # working-directory: ./terraform
+#      - name: Terraform Validate
+#        run: terraform validate
+#        # working-directory: ./terraform
 
-     - name: Terraform Apply
-       run: terraform apply -auto-approve
-       # working-directory: ./terraform
+#      - name: Terraform Apply
+#        run: terraform apply -auto-approve
+#        # working-directory: ./terraform
